@@ -1,0 +1,14 @@
+config:
+  target: http://localhost:8081
+  phases:
+    - duration: 10
+      arrivalRate: 10
+scenarios:
+  - name: 'test /limited'
+    flow:
+      - get:
+          url: '/limited'
+  - name: 'test /unlimited'
+    flow:
+      - get:
+          url: '/unlimited'
