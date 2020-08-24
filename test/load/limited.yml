@@ -3,20 +3,14 @@ config:
   plugins:
     expect: {}
   phases:
-    - duration: 10
+    - duration: 5
       arrivalRate: 100
   ensure:
-    maxErrorRate: 50
+    maxErrorRate: 1
 scenarios:
   - name: 'test /limited'
     flow:
       - get:
           url: '/limited'
           expect:
-            - statusCode: 204
-  - name: 'test /unlimited'
-    flow:
-      - get:
-          url: '/unlimited'
-          expect:
-            - statusCode: 204
+            - statusCode: 429

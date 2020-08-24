@@ -2,8 +2,8 @@ const express = require('express');
 const rateLimit = require("express-rate-limit");
 
 const apiLimiter = rateLimit({
-  windowMs: 100000, // 15 minutes
-  max: 1
+  windowMs: 10000, // 10 seconds
+  max: 5
 });
 
 const app = express();
