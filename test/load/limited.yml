@@ -1,0 +1,16 @@
+config:
+  target: http://localhost:8081
+  plugins:
+    expect: {}
+  phases:
+    - duration: 5
+      arrivalRate: 100
+  ensure:
+    maxErrorRate: 1
+scenarios:
+  - name: 'test /limited'
+    flow:
+      - get:
+          url: '/limited'
+          expect:
+            - statusCode: 429
