@@ -1,0 +1,34 @@
+config:
+  target: http://localhost:8081
+  plugins:
+    expect: {}
+  phases:
+    - duration: 5
+      arrivalRate: 300
+  ensure:
+    maxErrorRate: 1
+scenarios:
+  - name: 'test /double success'
+    flow:
+      - post:
+          url: '/double'
+          json:
+            number: 3
+          capture:
+            - json: "double"
+              as: double
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: double
+            - equals:
+              - "{{double}}"
+              - 6
+  - name: 'test /double error'
+    flow:
+      - post:
+          url: '/double'
+          json:
+            number: "a"
+          expect:
+            - statusCode: 400

@@ -6,11 +6,11 @@ config:
     - duration: 5
       arrivalRate: 100
   ensure:
-    maxErrorRate: 2
+    maxErrorRate: 1
 scenarios:
-  - name: 'test /limited'
+  - name: 'test /unlimited'
     flow:
       - get:
-          url: '/limited'
+          url: '/unlimited'
           expect:
-            - statusCode: 429
+            - statusCode: 204

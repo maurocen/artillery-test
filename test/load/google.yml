@@ -1,0 +1,24 @@
+config:
+  target: http://localhost:8081
+  plugins:
+    expect: {}
+  phases:
+    - duration: 5
+      arrivalRate: 100
+  ensure:
+    maxErrorRate: 1
+scenarios:
+  - name: 'test /google success'
+    flow:
+      - get:
+          url: '/google'
+          capture:
+            - json: "success"
+              as: success
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: success
+            - equals:
+              - "{{success}}"
+              - true
