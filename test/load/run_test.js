@@ -6,18 +6,6 @@ const { sleep } = require('../helpers');
 
 let server;
 
-const startServer = async () => {
-  try {
-    server = exec('npm run start');
-    server.stdout.on('data', console.log);
-
-    return server;
-  } catch (error) {
-    console.log('error starting server');
-    throw error;
-  }
-}
-
 const runArtilleryTest = async (path) => {
   try {
     const command = './node_modules/artillery/bin/artillery run ' + path + ' --target ' + process.env.HEROKU_URL;
@@ -68,12 +56,6 @@ const runArtillery = async () => {
 
 const runTest = async () => {
   try {
-    console.log('\r\n',chalk.blue('\u{25CC}'), ' Starting server...');
-    const server = await startServer();
-
-    await sleep(1);
-    console.log(chalk.green('\u{2713}'), ' Server started\n');
-
     await runArtillery();
 
     server.kill();
