@@ -20,8 +20,9 @@ const startServer = async () => {
 
 const runArtilleryTest = async (path) => {
   try {
+    const command = './node_modules/artillery/bin/artillery run ' + path + ' --target ' + process.env.HEROKU_URL;
+    console.log(command);
     process.stdout.write(`-  Test ${path}\r`);
-    const command = './node_modules/artillery/bin/artillery run ' + path;
     execSync(command);
     console.log(chalk.green('\u{2713}'), ' Test ' + path + ' ran successfully');
     return path;

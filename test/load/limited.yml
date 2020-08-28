@@ -1,5 +1,4 @@
 config:
-  target: http://localhost:8081
   plugins:
     expect: {}
   phases:
