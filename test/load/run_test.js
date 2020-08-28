@@ -6,24 +6,16 @@ const { sleep } = require('../helpers');
 
 let server;
 
-const startServer = async () => {
-  try {
-    server = exec('npm run start');
-    server.stdout.on('data', console.log);
-
-    return server;
-  } catch (error) {
-    console.log('error starting server');
-    throw error;
-  }
-}
-
 const runArtilleryTest = async (path) => {
   try {
-    const command = './node_modules/artillery/bin/artillery run ' + path;
+    const command = './node_modules/artillery/bin/artillery run ' + path + ' --target ' + process.env.HEROKU_URL;
+    console.log(command);
+    process.stdout.write(`-  Test ${path}\r`);
     execSync(command);
+    console.log(chalk.green('\u{2713}'), ' Test ' + path + ' ran successfully');
     return path;
   } catch (error) {
+    console.log(chalk.red('\u{2717}'), ' Test ' + path + ' failed');
     const wrappedError = new Error(error);
     wrappedError.file = path;
 
@@ -39,7 +31,7 @@ const runArtillery = async () => {
 
     const results = await Promise.allSettled(tests.map((testFile) => runArtilleryTest(loadPath + '/' + testFile)));
 
-    console.log(chalk.underline('Load test results:'));
+    console.log('\r\n', chalk.underline('Load test results:'));
 
     results.forEach(({ status, reason, value }) => {
       console.log(
@@ -57,25 +49,21 @@ const runArtillery = async () => {
     }
 
   } catch (error) {
-    console.log(chalk.red('\n\u{2717}'),' Error running artillery')
+    console.log(chalk.red('\r\n\u{2717}'),' Error running artillery')
     throw error;
   }
 }
 
 const runTest = async () => {
   try {
-    const server = await startServer();
-
-    await sleep(2);
-
     await runArtillery();
 
     server.kill();
 
-    console.log('\n', chalk.green('\u{2713}'), ' Tests ran successfully');
+    console.log('\r\n', chalk.green('\u{2713}'), ' Tests ran successfully');
     process.exit(0);
   } catch (error) {
-    console.log('\n', chalk.red('\u{2717}'), ' Error running tests');
+    console.log('\r\n', chalk.red('\u{2717}'), ' Error running tests');
     if (server && server.kill) {
       server.kill();
     }
